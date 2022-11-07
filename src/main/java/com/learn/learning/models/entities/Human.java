@@ -3,6 +3,7 @@ package com.learn.learning.models.entities;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tbl_human")
@@ -11,9 +12,11 @@ public class Human {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotEmpty(message = "name is required")
     @Column(name = "name", length = 50)
     private String name;
 
+    @NotEmpty(message = "hobby is required")
     @Column(name = "hobby", length = 50)
     private String hobby;
 
