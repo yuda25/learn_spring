@@ -1,5 +1,7 @@
 package com.learn.learning.models.entities;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +16,33 @@ public class Human {
 
     @Column(name = "hobby", length = 50)
     private String hobby;
+
+    @ManyToOne
+    private Status status;
+
+    @ManyToMany
+    @JoinTable(
+        name = "tbl_human_sick",
+        joinColumns = @JoinColumn(name = "human_id"),
+        inverseJoinColumns = @JoinColumn(name = "sick_id")
+        )
+    private Set<Sick> sicks;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Set<Sick> getSicks() {
+        return sicks;
+    }
+
+    public void setSicks(Set<Sick> sicks) {
+        this.sicks = sicks;
+    }
 
     public Human() {
     
