@@ -1,5 +1,7 @@
 package com.learn.learning.services;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +42,13 @@ public class HumanService {
         human.getSicks().add(sick);
         save(human);
     }
+
+    public Human findByHumanName(String name){
+        return humanRepository.findHumanByName(name);
+    }
+
+    public List<Human> findByHumanNameLike(String name){
+        return humanRepository.findHumanByNameLike("%"+name+"%");
+    }
+
 }

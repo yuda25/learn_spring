@@ -1,5 +1,7 @@
 package com.learn.learning.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.learning.dto.ResponseData;
+import com.learn.learning.dto.SearchData;
 import com.learn.learning.models.entities.Human;
 import com.learn.learning.models.entities.Sick;
 import com.learn.learning.services.HumanService;
@@ -84,5 +87,15 @@ public class HumanController {
     public void addSick(@RequestBody Sick sick, @PathVariable("id") Long humanId) {
         humanService.addSick(sick, humanId);
     }
-    
+    @PostMapping(value = "search-name")
+    public Human getHumanByName(@RequestBody SearchData searchData){
+        return humanService.findByHumanName(searchData.getSearchKey());
+    }
+
+    @PostMapping(value = "search-name-like")
+    public List<Human> getHumanByNameLike(@RequestBody SearchData searchData){
+        return humanService.findByHumanNameLike(searchData.getSearchKey());
+    }
+
+
 }
