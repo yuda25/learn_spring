@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.learn.learning.models.entities.Human;
+import com.learn.learning.models.entities.Sick;
 import com.learn.learning.models.repositories.HumanRepository;
 
 @Service
@@ -29,5 +30,14 @@ public class HumanService {
 
     public void remove(Long id) {
         humanRepository.deleteById(id);
+    }
+
+    public void addSick(Sick sick, Long humanId){
+        Human human = findOne(humanId);
+        if(human == null){
+            throw new RuntimeException("human with id:"+humanId+"not found");
+        }
+        human.getSicks().add(sick);
+        save(human);
     }
 }

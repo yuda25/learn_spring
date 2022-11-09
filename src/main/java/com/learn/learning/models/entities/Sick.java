@@ -4,8 +4,16 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "tbl_sick")
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id"
+)
 public class Sick {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,6 +23,7 @@ public class Sick {
     private String name;
 
     @ManyToMany(mappedBy = "sicks")
+    // @JsonBackReference
     private Set<Human> humans;
 
     public Set<Human> getHumans() {

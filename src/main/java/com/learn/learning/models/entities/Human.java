@@ -5,8 +5,15 @@ import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "tbl_human")
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id"
+)
 public class Human {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +36,7 @@ public class Human {
         joinColumns = @JoinColumn(name = "human_id"),
         inverseJoinColumns = @JoinColumn(name = "sick_id")
         )
+    // @JsonManagedReference
     private Set<Sick> sicks;
 
     public Status getStatus() {

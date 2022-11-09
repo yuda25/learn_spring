@@ -2,6 +2,8 @@ package com.learn.learning.controllers;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -16,24 +18,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.learning.dto.ResponseData;
-import com.learn.learning.models.entities.Human;
-import com.learn.learning.models.entities.Sick;
-import com.learn.learning.services.HumanService;
+import com.learn.learning.dto.StatusDto;
+import com.learn.learning.models.entities.Status;
+import com.learn.learning.services.StatusService;
 
 @RestController
-@RequestMapping("/human")
-public class HumanController {
-    private HumanService humanService;
+@RequestMapping("status")
+public class StatusController {
+    @Autowired
+    private StatusService statusService;
 
-    public HumanController(HumanService humanService) {
-        this.humanService = humanService;
-    }
+    @Autowired 
+    private ModelMapper modelMapper;
 
-    @PostMapping(value = "add-human")
-    public ResponseEntity<ResponseData<Human>> create(@Valid @RequestBody Human human, Errors errors) {
-        
-        ResponseData<Human> responseData = new ResponseData<>();
-
+    @PostMapping(value = "add-status")
+    public ResponseEntity<ResponseData<Status>> create(@Valid @RequestBody StatusDto statusDto, Errors errors){
+        ResponseData<Status> responseData = new ResponseData<>();
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
                 responseData.getMessage().add(error.getDefaultMessage());
@@ -42,47 +42,51 @@ public class HumanController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // mapp manual
+        // Sick sick = new Sick();
+        // sick.setName(sickDto.getName());
+
+        Status status = modelMapper.map(statusDto, Status.class);
+
         responseData.setStatus(true);
-        responseData.setPayload(humanService.save(human));
+        responseData.setPayload(statusService.save(status));
         return ResponseEntity.ok(responseData);
     }
 
-    @GetMapping(value = "get-one/{id}")
-    public  Human findOne(@PathVariable("id") Long id) {
-        return humanService.findOne(id);
-    }
-    
     @GetMapping(value = "get-all")
-    public Iterable<Human> findAll(){
-        return humanService.findAll();
+    public Iterable<Status> findAll(){
+        return statusService.findAll();
+    }
+
+    @GetMapping(value = "get-by-id/{id}")
+    public Status findOne(@PathVariable("id") Long id){
+        return statusService.findOne(id);
     }
 
     @PutMapping(value = "update")
-    public ResponseEntity<ResponseData<Human>> update(@Valid @RequestBody Human human, Errors errors) {
-
-        ResponseData<Human> responseData = new ResponseData<>();
-
-        if(errors.hasErrors()) {
-            for(ObjectError error : errors.getAllErrors()) {
+    public ResponseEntity<ResponseData<Status>> update(@Valid @RequestBody StatusDto statusDto, Errors errors){
+        ResponseData<Status> responseData = new ResponseData<>();
+        if(errors.hasErrors()){
+            for(ObjectError error : errors.getAllErrors()){
                 responseData.getMessage().add(error.getDefaultMessage());
             }
             responseData.setStatus(false);
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // mapp manual
+        // Sick sick = new Sick();
+        // sick.setName(sickDto.getName());
+
+        Status status = modelMapper.map(statusDto, Status.class);
+
         responseData.setStatus(true);
-        responseData.setPayload(humanService.save(human));
+        responseData.setPayload(statusService.save(status));
         return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping(value = "delete/{id}")
     public void delete(@PathVariable("id") long id) {
-        humanService.remove(id);
+        statusService.removeOne(id);
     }
-
-    @PostMapping(value="add-sick/{id}")
-    public void addSick(@RequestBody Sick sick, @PathVariable("id") Long humanId) {
-        humanService.addSick(sick, humanId);
-    }
-    
 }

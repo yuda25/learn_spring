@@ -1,7 +1,10 @@
 package com.learn.learning.controllers;
 
+
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -16,24 +19,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.learning.dto.ResponseData;
-import com.learn.learning.models.entities.Human;
+import com.learn.learning.dto.SickDto;
 import com.learn.learning.models.entities.Sick;
-import com.learn.learning.services.HumanService;
+import com.learn.learning.services.SickService;
 
 @RestController
-@RequestMapping("/human")
-public class HumanController {
-    private HumanService humanService;
+@RequestMapping("sick")
+public class SickConroller {
+    @Autowired
+    private SickService sickService;
 
-    public HumanController(HumanService humanService) {
-        this.humanService = humanService;
-    }
+    @Autowired ModelMapper modelMapper;
 
-    @PostMapping(value = "add-human")
-    public ResponseEntity<ResponseData<Human>> create(@Valid @RequestBody Human human, Errors errors) {
-        
-        ResponseData<Human> responseData = new ResponseData<>();
-
+    @PostMapping(value = "add-sick")
+    public ResponseEntity<ResponseData<Sick>> create(@Valid @RequestBody SickDto sickDto, Errors errors){
+        ResponseData<Sick> responseData = new ResponseData<>();
         if(errors.hasErrors()){
             for(ObjectError error : errors.getAllErrors()){
                 responseData.getMessage().add(error.getDefaultMessage());
@@ -42,47 +42,51 @@ public class HumanController {
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // mapp manual
+        // Sick sick = new Sick();
+        // sick.setName(sickDto.getName());
+
+        Sick sick = modelMapper.map(sickDto, Sick.class);
+
         responseData.setStatus(true);
-        responseData.setPayload(humanService.save(human));
+        responseData.setPayload(sickService.save(sick));
         return ResponseEntity.ok(responseData);
     }
 
-    @GetMapping(value = "get-one/{id}")
-    public  Human findOne(@PathVariable("id") Long id) {
-        return humanService.findOne(id);
-    }
-    
     @GetMapping(value = "get-all")
-    public Iterable<Human> findAll(){
-        return humanService.findAll();
+    public Iterable<Sick> findAll(){
+        return sickService.findAll();
+    }
+
+    @GetMapping(value = "get-one/{id}")
+    public Sick findOne(@PathVariable("id") Long id){
+        return sickService.findOne(id);
     }
 
     @PutMapping(value = "update")
-    public ResponseEntity<ResponseData<Human>> update(@Valid @RequestBody Human human, Errors errors) {
-
-        ResponseData<Human> responseData = new ResponseData<>();
-
-        if(errors.hasErrors()) {
-            for(ObjectError error : errors.getAllErrors()) {
+    public ResponseEntity<ResponseData<Sick>> update(@Valid @RequestBody SickDto sickDto, Errors errors){
+        ResponseData<Sick> responseData = new ResponseData<>();
+        if(errors.hasErrors()){
+            for(ObjectError error : errors.getAllErrors()){
                 responseData.getMessage().add(error.getDefaultMessage());
             }
             responseData.setStatus(false);
             responseData.setPayload(null);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseData);
         }
+        // mapp manual
+        // Sick sick = new Sick();
+        // sick.setName(sickDto.getName());
+
+        Sick sick = modelMapper.map(sickDto, Sick.class);
+
         responseData.setStatus(true);
-        responseData.setPayload(humanService.save(human));
+        responseData.setPayload(sickService.save(sick));
         return ResponseEntity.ok(responseData);
     }
 
     @DeleteMapping(value = "delete/{id}")
-    public void delete(@PathVariable("id") long id) {
-        humanService.remove(id);
+    public void delete(@PathVariable("id") long id){
+        sickService.removeOne(id);
     }
-
-    @PostMapping(value="add-sick/{id}")
-    public void addSick(@RequestBody Sick sick, @PathVariable("id") Long humanId) {
-        humanService.addSick(sick, humanId);
-    }
-    
 }
