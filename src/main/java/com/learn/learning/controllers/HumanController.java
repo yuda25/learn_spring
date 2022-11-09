@@ -101,4 +101,9 @@ public class HumanController {
     public List<Human> getHumanByStatus(@PathVariable("statusId") Long statusId){
         return humanService.findByStatusId(statusId);
     }
+
+    @GetMapping(value = "search-by-sick/{sickId}")
+    public List<Human> getHumanBySick(@PathVariable("sickId") Long sickId){
+        return humanService.findBySick(sickId);
+    }
 }

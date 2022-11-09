@@ -1,5 +1,6 @@
 package com.learn.learning.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,9 @@ public class HumanService {
     
     @Autowired
     private HumanRepository humanRepository;
+
+    @Autowired
+    private SickService sickService;
 
     public Human save(Human human) {
         return humanRepository.save(human);
@@ -53,6 +57,14 @@ public class HumanService {
 
     public List<Human> findByStatusId(Long statusId){
         return humanRepository.findHumanByStatusId(statusId);
+    }
+
+    public List<Human> findBySick(Long sickId){
+        Sick sick = sickService.findOne(sickId);
+        if(sick == null){
+            return new ArrayList<Human>();
+        }
+        return humanRepository.findHumanBySick(sick);        
     }
 
 }

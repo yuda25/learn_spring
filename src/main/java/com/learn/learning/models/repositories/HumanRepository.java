@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.learn.learning.models.entities.Human;
+import com.learn.learning.models.entities.Sick;
 
 public interface HumanRepository extends CrudRepository<Human, Long>{
     @Query("SELECT h FROM Human h WHERE h.name = :name")
@@ -18,4 +19,7 @@ public interface HumanRepository extends CrudRepository<Human, Long>{
 
     @Query("SELECT h FROM Human h WHERE h.status.id = :statusId")
     public List<Human> findHumanByStatusId(@PathParam("statusId") Long statusId);
+    
+    @Query("SELECT h FROM Human h WHERE :sick MEMBER OF h.sicks")
+    public List<Human> findHumanBySick(@PathParam("sick") Sick sick);
 }
