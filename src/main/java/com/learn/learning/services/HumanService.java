@@ -51,4 +51,8 @@ public class HumanService {
         return humanRepository.findHumanByNameLike("%"+name+"%");
     }
 
+    public List<Human> findByStatusId(Long statusId){
+        return humanRepository.findHumanByStatusId(statusId);
+    }
+
 }

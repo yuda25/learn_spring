@@ -97,5 +97,8 @@ public class HumanController {
         return humanService.findByHumanNameLike(searchData.getSearchKey());
     }
 
-
+    @GetMapping(value = "search-by-status/{statusId}")
+    public List<Human> getHumanByStatus(@PathVariable("statusId") Long statusId){
+        return humanService.findByStatusId(statusId);
+    }
 }
