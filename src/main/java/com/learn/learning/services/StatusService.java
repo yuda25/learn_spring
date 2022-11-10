@@ -40,4 +40,8 @@ public class StatusService {
     public Iterable<Status> findByName(String name, Pageable pageable){
         return statusRepository.findByNameContains(name, pageable);
     }
+
+    public Iterable<Status> saveBach(Iterable<Status> status){
+        return statusRepository.saveAll(status);
+    }
 }

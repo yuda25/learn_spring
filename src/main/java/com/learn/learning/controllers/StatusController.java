@@ -1,5 +1,7 @@
 package com.learn.learning.controllers;
 
+import java.util.Arrays;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -107,4 +109,12 @@ public class StatusController {
             }
             return statusService.findByName(searchData.getSearchKey(), pageable); 
         }
+    
+    @PostMapping("add-batch")
+    public ResponseEntity<ResponseData<Iterable<Status>>> createBash(@RequestBody Status[] status){
+        ResponseData<Iterable<Status>> responseData = new ResponseData<>();
+        responseData.setPayload(statusService.saveBach(Arrays.asList(status)));
+        responseData.setStatus(true);
+        return ResponseEntity.ok(responseData);
+    }
 }
