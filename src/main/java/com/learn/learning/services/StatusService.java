@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.learn.learning.models.entities.Status;
@@ -34,5 +35,9 @@ public class StatusService {
 
     public void removeOne(Long id){
         statusRepository.deleteById(id);
+    }
+
+    public Iterable<Status> findByName(String name, Pageable pageable){
+        return statusRepository.findByNameContains(name, pageable);
     }
 }

@@ -4,6 +4,9 @@ import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.learning.dto.ResponseData;
+import com.learn.learning.dto.SearchData;
 import com.learn.learning.dto.StatusDto;
 import com.learn.learning.models.entities.Status;
 import com.learn.learning.services.StatusService;
@@ -89,4 +93,18 @@ public class StatusController {
     public void delete(@PathVariable("id") long id) {
         statusService.removeOne(id);
     }
+
+    @PostMapping("search/{size}/{page}/{sort}")
+    public Iterable<Status> findByName(
+        @RequestBody SearchData searchData,
+        @PathVariable("size") int size,
+        @PathVariable("page") int page,
+        @PathVariable("sort") String sort
+        ){
+            Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+            if(sort.equalsIgnoreCase("desc")){
+                pageable = PageRequest.of(page, size, Sort.by("id").descending());
+            }
+            return statusService.findByName(searchData.getSearchKey(), pageable); 
+        }
 }
