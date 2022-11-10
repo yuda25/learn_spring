@@ -10,10 +10,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "tbl_sick")
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "id"
-)
+// @JsonIdentityInfo(
+//     generator = ObjectIdGenerators.PropertyGenerator.class,
+//     property = "id"
+// )
 public class Sick {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +23,7 @@ public class Sick {
     private String name;
 
     @ManyToMany(mappedBy = "sicks")
-    // @JsonBackReference
+    @JsonBackReference
     private Set<Human> humans;
 
     public Set<Human> getHumans() {

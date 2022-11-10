@@ -11,10 +11,10 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
 @Table(name = "tbl_human")
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "id"
-)
+// @JsonIdentityInfo(
+//     generator = ObjectIdGenerators.PropertyGenerator.class,
+//     property = "id"
+// )
 public class Human {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,7 +37,7 @@ public class Human {
         joinColumns = @JoinColumn(name = "human_id"),
         inverseJoinColumns = @JoinColumn(name = "sick_id")
         )
-    // @JsonManagedReference
+    @JsonManagedReference
     private Set<Sick> sicks;
 
     public Status getStatus() {

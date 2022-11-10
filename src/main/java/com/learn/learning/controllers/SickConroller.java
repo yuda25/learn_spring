@@ -1,6 +1,8 @@
 package com.learn.learning.controllers;
 
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.learning.dto.ResponseData;
+import com.learn.learning.dto.SearchData;
 import com.learn.learning.dto.SickDto;
 import com.learn.learning.models.entities.Sick;
 import com.learn.learning.services.SickService;
@@ -88,5 +91,20 @@ public class SickConroller {
     @DeleteMapping(value = "delete/{id}")
     public void delete(@PathVariable("id") long id){
         sickService.removeOne(id);
+    }
+
+    @PostMapping("search-by-name")
+    public List<Sick> findByName(@RequestBody SearchData searchData){
+        return sickService.findByName(searchData.getSearchKey());
+    }
+
+    @PostMapping("search-by-name-contains")
+    public List<Sick> findByNameContains(@RequestBody SearchData searchData){
+        return sickService.findByNameContains(searchData.getSearchKey());
+    }
+
+    @PostMapping("search-by-start-name")
+    public List<Sick> findByNameStartsWith(@RequestBody SearchData searchData){
+        return sickService.findByStartName(searchData.getSearchKey());
     }
 }

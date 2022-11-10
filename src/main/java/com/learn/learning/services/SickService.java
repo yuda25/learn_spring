@@ -1,5 +1,6 @@
 package com.learn.learning.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -34,5 +35,17 @@ public class SickService {
 
     public void removeOne(Long id){
         sickRepository.deleteById(id);
+    }
+
+    public List<Sick> findByName(String name){
+        return sickRepository.findByName(name);
+    }
+
+    public List<Sick> findByNameContains(String name){
+        return sickRepository.findByNameContainsOrderByNameAsc(name);
+    }
+
+    public List<Sick> findByStartName(String name){
+        return sickRepository.findByNameStartingWith(name);
     }
 }
