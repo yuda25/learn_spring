@@ -1,5 +1,7 @@
 package com.learn.learning.controllers;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,4 +23,12 @@ public class EmailController {
         // emailService.send("kym25@spambox.xyz", "test", "keep happy");
         emailService.send(emailDto.getTo(), emailDto.getSubject(), emailDto.getBody());
     }
+    
+    @PostMapping("sendEmailGood")
+    // @EventListener(ApplicationReadyEvent.class)
+    public void sendEmailWithAttachment(@RequestBody EmailDto emailDto) throws MessagingException{
+        emailService.sendEmailWithAttachment(emailDto.getTo(), emailDto.getSubject(), emailDto.getBody(), "C:\\project\\learn_spring\\src\\main\\resources\\templates\\index.html");
+    }
+
+
 }
